@@ -1324,23 +1324,44 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); }
 </style>
 <!-- WAITLIST MODAL -->
 <div id="waitlist-modal" style="display:none;position:fixed;inset:0;background:rgba(7,9,14,.92);backdrop-filter:blur(10px);z-index:200;align-items:center;justify-content:center;">
-  <div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;width:520px;max-width:95vw;overflow:hidden;animation:fadeUp .4s ease both;">
-    <div style="padding:28px 32px 0;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <div style="font-size:20px;font-weight:800;letter-spacing:-.5px;">Join the Waitlist 🚀</div>
-        <div onclick="closeWaitlist()" style="width:28px;height:28px;border:1px solid var(--border);background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted2);font-size:14px;transition:all .15s;" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted2)'">✕</div>
-      </div>
-      <div style="font-size:13px;color:var(--muted2);font-family:var(--mono);margin-bottom:20px;">Get early access + 30 days Pro free when we launch</div>
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;width:460px;max-width:95vw;padding:36px 38px;animation:fadeUp .4s ease both;position:relative;">
+    <!-- Close -->
+    <div onclick="closeWaitlist()" style="position:absolute;top:16px;right:16px;width:28px;height:28px;border:1px solid var(--border);background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted2);font-size:13px;transition:all .15s;" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted2)'">✕</div>
+    <!-- Header -->
+    <div style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">// Early Access</div>
+    <div style="font-size:24px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;">Get in before launch 🚀</div>
+    <div style="font-size:13px;color:var(--muted2);line-height:1.65;margin-bottom:28px;">Join the waitlist and get <span style="color:var(--accent);font-weight:700;">30 days Pro free</span> when TrendSnipe launches. Limited spots.</div>
+    <!-- Perks -->
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px;">
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--accent)">✓</span> 30 days Pro plan — free</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--accent)">✓</span> Early access before public launch</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);"><span style="color:var(--accent)">✓</span> Founding member pricing forever</div>
     </div>
-    <iframe data-tally-src="https://tally.so/embed/rjkGpN?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="200" frameborder="0" style="background:transparent;padding:0 32px 24px;display:block;"></iframe>
+    <!-- Form -->
+    <div id="waitlist-form-wrap">
+      <div style="margin-bottom:10px;">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Your Email</div>
+        <input id="waitlist-email" type="email" placeholder="you@example.com" style="width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 16px;font-family:var(--mono);font-size:13px;border-radius:6px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,255,136,.4)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')submitWaitlist()"/>
+      </div>
+      <button onclick="submitWaitlist()" id="waitlist-btn" style="width:100%;padding:14px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:14px;cursor:pointer;border-radius:6px;transition:all .2s;margin-top:4px;" onmouseover="this.style.background='#00e07a'" onmouseout="this.style.background='var(--accent)'">Join Waitlist →</button>
+      <div style="text-align:center;margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--muted);">No spam. Unsubscribe anytime.</div>
+    </div>
+    <!-- Success -->
+    <div id="waitlist-success" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+      <div style="font-size:18px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px;">You're on the list!</div>
+      <div style="font-size:13px;color:var(--muted2);line-height:1.65;">We'll email you at launch with your free 30-day Pro access. Stay tuned.</div>
+      <button onclick="closeWaitlist()" style="margin-top:20px;padding:11px 24px;background:transparent;border:1px solid var(--border);color:var(--muted2);font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;border-radius:6px;">Close</button>
+    </div>
   </div>
 </div>
 
 <script>
 function showWaitlist(){
-  const m=document.getElementById('waitlist-modal');
-  m.style.display='flex';
-  if(window.Tally)Tally.loadEmbeds();
+  document.getElementById('waitlist-modal').style.display='flex';
+  document.getElementById('waitlist-form-wrap').style.display='block';
+  document.getElementById('waitlist-success').style.display='none';
+  document.getElementById('waitlist-email').value='';
 }
 function closeWaitlist(){
   document.getElementById('waitlist-modal').style.display='none';
@@ -1348,7 +1369,31 @@ function closeWaitlist(){
 document.getElementById('waitlist-modal').addEventListener('click',function(e){
   if(e.target===this)closeWaitlist();
 });
+async function submitWaitlist(){
+  const email=document.getElementById('waitlist-email').value.trim();
+  if(!email||!email.includes('@')){
+    document.getElementById('waitlist-email').style.borderColor='var(--red)';
+    return;
+  }
+  const btn=document.getElementById('waitlist-btn');
+  btn.textContent='Sending...';
+  btn.style.opacity='0.7';
+  try {
+    await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        access_key:'3e18eda8-b622-4aa2-818d-0f7855bf2582',
+        subject:'New TrendSnipe Waitlist Signup',
+        from_name:'TrendSnipe Waitlist',
+        email:'khayyemciu@gmail.com',
+        message:`New waitlist signup: ${email}`
+      })
+    });
+  } catch(e){}
+  document.getElementById('waitlist-form-wrap').style.display='none';
+  document.getElementById('waitlist-success').style.display='block';
+}
 </script>
-<script async src="https://tally.so/widgets/embed.js"></script>
 </body>
 </html>

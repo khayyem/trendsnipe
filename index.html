@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TrendSnipe — Find Winning Products Before Everyone Else</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07090e;--bg2:#0b0e16;--bg3:#0f1320;
+  --card:#111827;--card2:#161d2e;
+  --border:#1c2438;--border2:#242f47;
+  --accent:#00ff88;--accent2:#00c4ff;
+  --gold:#ffc83d;--red:#ff4560;--purple:#a78bfa;
+  --muted:#4a5878;--muted2:#7a8aaa;--text:#dde4f0;
+  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+  --sidebar:228px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);}
+
+/* ── PAGES ── */
+.page{display:none;width:100%;height:100%;}
+.page.active{display:flex;flex-direction:column;}
+#page-landing{overflow-y:auto;}
+#page-landing::-webkit-scrollbar{width:4px;}
+#page-landing::-webkit-scrollbar-thumb{background:var(--border2);}
+
+/* ══════════════════════════════════════
+   LANDING
+══════════════════════════════════════ */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.35;}
+.l-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(7,9,14,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.5px;}
+.logo span{color:var(--accent);}
+.l-nav-links{display:flex;gap:32px;list-style:none;}
+.l-nav-links a{color:var(--muted2);text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:color .2s;}
+.l-nav-links a:hover{color:var(--text);}
+.l-nav-right{display:flex;gap:10px;align-items:center;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted2);padding:9px 20px;font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;border-radius:4px;}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
+.btn-nav{background:var(--accent);color:#000;border:none;padding:10px 22px;font-family:var(--font);font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;border-radius:4px;}
+.btn-nav:hover{background:#00e07a;transform:translateY(-1px);}
+
+.l-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:120px 60px 80px;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.025) 1px,transparent 1px);background-size:55px 55px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);}
+.hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(0,255,136,.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.hero-glow2{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,196,255,.05) 0%,transparent 70%);top:20%;right:8%;pointer-events:none;}
+.hero-content{position:relative;z-index:1;max-width:900px;text-align:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);padding:7px 16px;font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:38px;border-radius:3px;animation:fadeDown .6s ease both;}
+.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+.hero h1{font-size:clamp(50px,8vw,96px);font-weight:800;line-height:.95;letter-spacing:-3px;margin-bottom:28px;animation:fadeUp .7s .1s ease both;}
+.hero h1 .line2{color:var(--accent);display:block;}
+.hero h1 .strike{position:relative;color:var(--muted2);}
+.hero h1 .strike::after{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:var(--red);transform:rotate(-2deg);}
+.hero-sub{font-size:17px;color:var(--muted2);max-width:540px;margin:0 auto 46px;line-height:1.75;animation:fadeUp .7s .2s ease both;}
+.hero-actions{display:flex;gap:12px;justify-content:center;animation:fadeUp .7s .3s ease both;}
+.btn-primary{background:var(--accent);color:#000;border:none;padding:15px 34px;font-family:var(--font);font-weight:800;font-size:15px;cursor:pointer;transition:all .2s;border-radius:4px;}
+.btn-primary:hover{background:#00e07a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,255,136,.3);}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:15px 34px;font-family:var(--font);font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;border-radius:4px;}
+.btn-secondary:hover{border-color:var(--muted);transform:translateY(-2px);}
+.hero-stats{display:flex;gap:56px;justify-content:center;margin-top:76px;animation:fadeUp .7s .4s ease both;}
+.stat{text-align:center;}
+.stat-num{font-size:34px;font-weight:800;color:var(--accent);letter-spacing:-1px;}
+.stat-label{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-top:4px;}
+
+.ticker{background:var(--accent);color:#000;padding:11px 0;overflow:hidden;}
+.ticker-inner{display:flex;gap:56px;animation:ticker 22s linear infinite;white-space:nowrap;}
+.ticker-item{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+.l-how{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:110px 60px;}
+.l-how-inner{max-width:1160px;margin:0 auto;}
+.section-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:18px;}
+.section-title{font-size:clamp(30px,4vw,52px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:18px;}
+.section-sub{font-size:15px;color:var(--muted2);max-width:460px;line-height:1.75;}
+.how-header{margin-bottom:70px;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.step{background:var(--card);padding:44px 36px;position:relative;overflow:hidden;transition:transform .3s;}
+.step:hover{transform:translateY(-4px);}
+.step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+.step-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:2px;margin-bottom:28px;}
+.step-icon{font-size:34px;margin-bottom:18px;}
+.step h3{font-size:21px;font-weight:800;letter-spacing:-.5px;margin-bottom:11px;}
+.step p{font-size:14px;color:var(--muted2);line-height:1.7;}
+
+.l-products{padding:110px 60px;}
+.products-inner{max-width:1160px;margin:0 auto;}
+.products-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;}
+.live-badge{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--red);letter-spacing:1px;}
+.live-dot{width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 1s infinite;}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.product-card{background:var(--card);border:1px solid var(--border);padding:26px;position:relative;cursor:pointer;transition:all .25s;overflow:hidden;border-radius:8px;}
+.product-card:hover{border-color:rgba(0,255,136,.3);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4);}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.platform-tag{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;background:rgba(0,196,255,.1);color:var(--accent2);border:1px solid rgba(0,196,255,.2);border-radius:3px;}
+.trend-score{font-family:var(--mono);font-size:11px;color:var(--accent);}
+.product-emoji{font-size:44px;margin-bottom:14px;display:block;}
+.product-name{font-size:17px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
+.product-niche{font-size:12px;color:var(--muted2);font-family:var(--mono);margin-bottom:18px;}
+.product-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding-top:18px;border-top:1px solid var(--border);}
+.pstat-label{font-size:10px;color:var(--muted2);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.pstat-val{font-size:14px;font-weight:800;}
+.pstat-val.green{color:var(--accent);}
+.pstat-val.blue{color:var(--accent2);}
+.viral-bar{margin-top:14px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.viral-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.locked-card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(7,9,14,.78);z-index:2;border-radius:8px;flex-direction:column;gap:8px;}
+
+.l-pricing{background:var(--bg2);border-top:1px solid var(--border);padding:110px 60px;}
+.pricing-inner{max-width:860px;margin:0 auto;text-align:center;}
+.pricing-header{margin-bottom:64px;}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.plan{background:var(--card);padding:46px 38px;text-align:left;position:relative;}
+.plan.featured{background:#0d1f14;border:1px solid rgba(0,255,136,.3);}
+.plan-tag{position:absolute;top:-1px;right:28px;background:var(--accent);color:#000;font-size:10px;font-weight:800;font-family:var(--mono);letter-spacing:1px;padding:4px 11px;text-transform:uppercase;}
+.plan-name{font-size:12px;font-family:var(--mono);color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;}
+.plan-price{font-size:56px;font-weight:800;letter-spacing:-3px;line-height:1;margin-bottom:7px;}
+.plan-price sup{font-size:22px;letter-spacing:0;vertical-align:super;}
+.plan-period{font-size:12px;color:var(--muted2);font-family:var(--mono);margin-bottom:36px;}
+.plan-features{list-style:none;margin-bottom:36px;}
+.plan-features li{display:flex;align-items:center;gap:11px;font-size:13px;color:var(--muted2);padding:9px 0;border-bottom:1px solid var(--border);}
+.plan-features li:last-child{border:none;}
+.plan-features li .check{color:var(--accent);}
+.plan-features li.on{color:var(--text);}
+.plan-btn{width:100%;padding:14px;font-family:var(--font);font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;text-transform:uppercase;border-radius:4px;letter-spacing:.3px;}
+.plan-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.plan-btn.outline:hover{border-color:var(--muted);}
+.plan-btn.solid{background:var(--accent);border:none;color:#000;}
+.plan-btn.solid:hover{background:#00e07a;box-shadow:0 6px 24px rgba(0,255,136,.3);}
+
+.l-footer{border-top:1px solid var(--border);padding:46px 60px;display:flex;align-items:center;justify-content:space-between;}
+.footer-logo{font-size:19px;font-weight:800;}
+.footer-logo span{color:var(--accent);}
+.footer-copy{font-size:12px;color:var(--muted2);font-family:var(--mono);}
+.footer-links{display:flex;gap:28px;list-style:none;}
+.footer-links a{font-size:12px;color:var(--muted2);text-decoration:none;font-family:var(--mono);transition:color .2s;}
+.footer-links a:hover{color:var(--text);}
+
+/* ══════════════════════════════════════
+   ONBOARDING
+══════════════════════════════════════ */
+#page-onboard{align-items:center;justify-content:center;position:relative;}
+.onboard-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,136,.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.onboard-box{position:relative;z-index:1;background:var(--card);border:1px solid var(--border2);border-radius:14px;width:540px;padding:44px 42px;animation:fadeUp .5s ease both;}
+.onboard-step{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
+.onboard-title{font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
+.onboard-sub{font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:32px;}
+.onboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;}
+.onboard-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:18px;cursor:pointer;transition:all .2s;text-align:center;}
+.onboard-card:hover{border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.04);}
+.onboard-card.selected{border-color:var(--accent);background:rgba(0,255,136,.08);}
+.onboard-card-icon{font-size:28px;margin-bottom:8px;}
+.onboard-card-name{font-size:13px;font-weight:700;}
+.onboard-card-desc{font-size:11px;color:var(--muted2);font-family:var(--mono);margin-top:3px;}
+.onboard-next{width:100%;padding:14px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:14px;cursor:pointer;border-radius:6px;transition:all .2s;letter-spacing:.3px;}
+.onboard-next:hover{background:#00e07a;transform:translateY(-1px);}
+.onboard-skip{text-align:center;margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--muted2);cursor:pointer;transition:color .2s;}
+.onboard-skip:hover{color:var(--text);}
+.onboard-progress{display:flex;gap:6px;margin-bottom:32px;}
+.ob-dot{height:3px;border-radius:2px;flex:1;background:var(--border);}
+.ob-dot.done{background:var(--accent);}
+
+/* ══════════════════════════════════════
+   AUTH
+══════════════════════════════════════ */
+#page-auth{align-items:center;justify-content:center;position:relative;}
+.auth-glow{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,136,.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.auth-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.02) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent);}
+.auth-box{position:relative;z-index:1;background:var(--card);border:1px solid var(--border2);border-radius:14px;width:430px;padding:42px 38px;animation:fadeUp .5s ease both;}
+.auth-logo{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;}
+.auth-logo span{color:var(--accent);}
+.auth-tagline{text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:1.5px;margin-bottom:32px;}
+.auth-tabs{display:flex;background:var(--bg3);border-radius:6px;padding:4px;margin-bottom:28px;border:1px solid var(--border);}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border-radius:4px;color:var(--muted2);transition:all .2s;}
+.auth-tab.active{background:var(--card2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.auth-form{display:flex;flex-direction:column;gap:14px;}
+.field-label{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.field-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:11px 14px;font-family:var(--mono);font-size:13px;border-radius:6px;outline:none;transition:border-color .2s;}
+.field-input:focus{border-color:rgba(0,255,136,.4);}
+.field-input::placeholder{color:var(--muted);}
+.auth-submit{width:100%;padding:13px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:14px;cursor:pointer;border-radius:6px;transition:all .2s;margin-top:2px;}
+.auth-submit:hover{background:#00e07a;transform:translateY(-1px);}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:2px 0;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-divider span{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;}
+.auth-demo{width:100%;padding:11px;background:transparent;color:var(--muted2);border:1px solid var(--border);font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;border-radius:6px;transition:all .2s;}
+.auth-demo:hover{border-color:var(--border2);color:var(--text);}
+.auth-back{margin-top:18px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted2);cursor:pointer;transition:color .2s;}
+.auth-back:hover{color:var(--accent);}
+.auth-error{background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.2);color:var(--red);padding:9px 13px;border-radius:6px;font-family:var(--mono);font-size:12px;display:none;margin-bottom:4px;}
+
+/* ══════════════════════════════════════
+   DASHBOARD SHELL
+══════════════════════════════════════ */
+#page-dashboard{flex-direction:row;overflow:hidden;}
+
+.sidebar{width:var(--sidebar);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
+.sidebar-logo{padding:22px 20px 20px;border-bottom:1px solid var(--border);font-size:19px;font-weight:800;letter-spacing:-.5px;}
+.sidebar-logo span{color:var(--accent);}
+.sidebar-section{padding:18px 12px 7px;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:1px 6px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted2);cursor:pointer;transition:all .18s;position:relative;}
+.nav-item:hover{background:var(--bg3);color:var(--text);}
+.nav-item.active{background:rgba(0,255,136,.08);color:var(--accent);border:1px solid rgba(0,255,136,.12);}
+.nav-item.active::before{content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);width:3px;height:18px;background:var(--accent);border-radius:0 2px 2px 0;}
+.nav-icon{font-size:15px;width:18px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--accent);color:#000;font-size:9px;font-weight:800;font-family:var(--mono);padding:2px 6px;border-radius:3px;}
+.nav-badge.red{background:var(--red);color:#fff;}
+.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding:14px 12px;}
+.user-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:6px;cursor:pointer;transition:background .2s;}
+.user-card:hover{background:var(--bg3);}
+.avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#000;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:700;}
+.user-plan{font-size:10px;font-family:var(--mono);color:var(--accent);letter-spacing:.5px;}
+.logout-btn{display:flex;align-items:center;gap:8px;padding:7px 10px;margin-top:4px;font-size:11px;color:var(--muted2);cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--mono);}
+.logout-btn:hover{color:var(--red);background:rgba(255,69,96,.06);}
+
+.d-main{flex:1;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+.d-main::-webkit-scrollbar{width:4px;}
+.d-main::-webkit-scrollbar-thumb{background:var(--border2);}
+
+.topbar{position:sticky;top:0;z-index:5;background:rgba(7,9,14,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 26px;height:56px;display:flex;align-items:center;gap:14px;}
+.topbar-title{font-size:15px;font-weight:800;letter-spacing:-.3px;}
+.topbar-sub{font-size:12px;color:var(--muted2);font-family:var(--mono);margin-left:3px;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:9px;}
+.search-box{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);padding:6px 13px;border-radius:6px;width:180px;transition:border-color .2s;}
+.search-box:focus-within{border-color:var(--border2);}
+.search-box input{background:none;border:none;outline:none;font-family:var(--mono);font-size:12px;color:var(--text);width:100%;}
+.search-box input::placeholder{color:var(--muted);}
+.icon-btn{width:32px;height:32px;border:1px solid var(--border);background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s;position:relative;}
+.icon-btn:hover{border-color:var(--border2);}
+.notif-dot{position:absolute;top:5px;right:5px;width:5px;height:5px;background:var(--red);border-radius:50%;}
+
+.d-content{padding:22px 26px;flex:1;}
+.d-view{display:none;}
+.d-view.active{display:block;}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px;}
+.kpi{background:var(--card);border:1px solid var(--border);padding:18px 18px 14px;border-radius:10px;position:relative;overflow:hidden;transition:all .2s;cursor:default;}
+.kpi:hover{border-color:var(--border2);transform:translateY(-2px);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi:nth-child(1)::before{background:linear-gradient(90deg,var(--accent),transparent);}
+.kpi:nth-child(2)::before{background:linear-gradient(90deg,var(--accent2),transparent);}
+.kpi:nth-child(3)::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.kpi:nth-child(4)::before{background:linear-gradient(90deg,var(--red),transparent);}
+.kpi-label{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;}
+.kpi-val{font-size:28px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:7px;}
+.kpi-change{font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:3px;}
+.kpi-change.up{color:var(--accent);}
+.kpi-change.down{color:var(--red);}
+.kpi-icon{position:absolute;right:14px;top:14px;font-size:24px;opacity:.1;}
+
+/* PANELS */
+.grid-2{display:grid;grid-template-columns:1fr 308px;gap:12px;margin-bottom:12px;}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
+.panel-title{font-size:13px;font-weight:700;letter-spacing:-.3px;}
+.panel-meta{font-family:var(--mono);font-size:11px;color:var(--muted2);}
+.panel-body{padding:14px 18px;}
+
+.filter-tabs{display:flex;gap:4px;padding:10px 18px;border-bottom:1px solid var(--border);}
+.ftab{padding:5px 11px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.5px;cursor:pointer;border-radius:4px;color:var(--muted2);border:1px solid transparent;transition:all .15s;}
+.ftab:hover{color:var(--text);background:var(--bg3);}
+.ftab.active{color:var(--accent);background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.2);}
+
+.product-list-wrap{max-height:340px;overflow-y:auto;}
+.product-list-wrap::-webkit-scrollbar{width:3px;}
+.product-list-wrap::-webkit-scrollbar-thumb{background:var(--border2);}
+.prod-row{display:grid;grid-template-columns:28px 1fr 76px 68px 70px 74px 66px;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.prod-row:last-child{border-bottom:none;}
+.prod-row:hover{background:rgba(255,255,255,.02);}
+.prod-row.header{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:8px 18px;cursor:default;background:var(--bg3);}
+.prod-row.header:hover{background:var(--bg3);}
+.prod-emoji{font-size:18px;}
+.prod-info{min-width:0;}
+.prod-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prod-niche{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:2px;}
+.score-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:500;}
+.score-pill.high{background:rgba(0,255,136,.1);color:var(--accent);border:1px solid rgba(0,255,136,.2);}
+.score-pill.med{background:rgba(255,200,61,.1);color:var(--gold);border:1px solid rgba(255,200,61,.2);}
+.score-pill.low{background:rgba(255,69,96,.1);color:var(--red);border:1px solid rgba(255,69,96,.15);}
+.price-tag{font-family:var(--mono);font-size:12px;font-weight:500;}
+.price-tag.blue{color:var(--accent2);}
+.price-tag.green{color:var(--accent);}
+.plat-tag{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;}
+.plat-tag.tiktok{background:rgba(255,0,80,.1);color:#ff0050;border:1px solid rgba(255,0,80,.15);}
+.plat-tag.instagram{background:rgba(193,53,132,.1);color:#c13584;border:1px solid rgba(193,53,132,.15);}
+.cj-btn{padding:3px 9px;background:rgba(0,196,255,.08);border:1px solid rgba(0,196,255,.2);color:var(--accent2);font-family:var(--mono);font-size:10px;font-weight:500;cursor:pointer;border-radius:4px;transition:all .15s;}
+.cj-btn:hover{background:rgba(0,196,255,.18);}
+
+.alert-list{display:flex;flex-direction:column;}
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);}
+.alert-item:last-child{border-bottom:none;}
+.al-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.al-dot.g{background:var(--accent);box-shadow:0 0 5px var(--accent);}
+.al-dot.b{background:var(--accent2);box-shadow:0 0 5px var(--accent2);}
+.al-dot.y{background:var(--gold);box-shadow:0 0 5px var(--gold);}
+.al-dot.r{background:var(--red);box-shadow:0 0 5px var(--red);}
+.alert-content{flex:1;min-width:0;}
+.alert-title{font-size:12px;font-weight:700;margin-bottom:2px;}
+.alert-desc{font-size:11px;color:var(--muted2);line-height:1.5;}
+.alert-time{font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;}
+
+.niche-list{display:flex;flex-direction:column;gap:11px;}
+.niche-top{display:flex;justify-content:space-between;margin-bottom:5px;}
+.niche-name{font-size:12px;font-weight:700;}
+.niche-pct{font-family:var(--mono);font-size:10px;color:var(--muted2);}
+.niche-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.niche-fill{height:100%;border-radius:2px;}
+
+.live-header{display:flex;align-items:center;gap:7px;}
+.live-pulse{width:7px;height:7px;border-radius:50%;background:var(--red);animation:livePulse 1.2s ease infinite;}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,69,96,.6);}50%{box-shadow:0 0 0 5px rgba(255,69,96,0);}}
+
+/* ══ TRENDING VIEW ══ */
+.trending-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+.t-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s;}
+.t-card:hover{border-color:rgba(0,255,136,.3);transform:translateY(-2px);}
+.t-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.t-rank{font-family:var(--mono);font-size:11px;color:var(--muted2);}
+.t-rank.top{color:var(--gold);}
+.t-emoji{font-size:32px;margin-bottom:10px;display:block;}
+.t-name{font-size:14px;font-weight:800;margin-bottom:4px;}
+.t-niche{font-size:11px;font-family:var(--mono);color:var(--muted2);margin-bottom:14px;}
+.t-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border);}
+.t-key{font-family:var(--mono);font-size:10px;color:var(--muted2);}
+.t-val{font-family:var(--mono);font-size:12px;font-weight:500;}
+.t-val.g{color:var(--accent);}
+.t-val.b{color:var(--accent2);}
+.t-val.y{color:var(--gold);}
+.sort-bar{display:flex;gap:8px;align-items:center;margin-bottom:4px;}
+.sort-label{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;}
+.sort-btn{padding:5px 12px;font-family:var(--mono);font-size:11px;border-radius:4px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted2);transition:all .15s;}
+.sort-btn:hover{color:var(--text);}
+.sort-btn.active{color:var(--accent);border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.06);}
+
+/* ══ ANALYZER VIEW ══ */
+.analyzer-wrap{max-width:760px;}
+.analyzer-input-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:28px;margin-bottom:20px;}
+.analyzer-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.analyzer-title{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
+.analyzer-sub{font-size:13px;color:var(--muted2);margin-bottom:22px;line-height:1.6;}
+.url-row{display:flex;gap:10px;}
+.url-input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 16px;font-family:var(--mono);font-size:13px;border-radius:6px;outline:none;transition:border-color .2s;}
+.url-input:focus{border-color:rgba(0,255,136,.4);}
+.url-input::placeholder{color:var(--muted);}
+.analyze-btn{padding:12px 22px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:13px;cursor:pointer;border-radius:6px;transition:all .2s;white-space:nowrap;}
+.analyze-btn:hover{background:#00e07a;}
+.analyzer-result{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:none;}
+.analyzer-result.show{display:block;animation:fadeUp .4s ease both;}
+.ar-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;}
+.ar-emoji{font-size:40px;}
+.ar-meta h3{font-size:18px;font-weight:800;letter-spacing:-.5px;}
+.ar-meta p{font-size:12px;color:var(--muted2);font-family:var(--mono);margin-top:3px;}
+.ar-body{padding:20px 24px;}
+.ar-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.ar-stat{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:14px;}
+.ar-stat-label{font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.ar-stat-val{font-size:18px;font-weight:800;letter-spacing:-.5px;}
+.ar-stat-val.g{color:var(--accent);}
+.ar-stat-val.b{color:var(--accent2);}
+.ar-stat-val.y{color:var(--gold);}
+.ar-stat-val.r{color:var(--red);}
+.ar-verdict{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.15);border-radius:7px;padding:16px 18px;margin-bottom:16px;}
+.ar-verdict-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.ar-verdict-text{font-size:13px;line-height:1.65;color:var(--text);}
+.ar-actions{display:flex;gap:9px;}
+.ar-btn{padding:10px 18px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:12px;cursor:pointer;border-radius:6px;transition:all .2s;}
+.ar-btn:hover{background:#00e07a;}
+.ar-btn.sec{background:var(--bg3);color:var(--text);border:1px solid var(--border);}
+.ar-btn.sec:hover{border-color:var(--border2);}
+.analyze-loading{display:none;padding:40px;text-align:center;}
+.analyze-loading.show{display:block;}
+.loading-spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--muted2);letter-spacing:1px;}
+
+/* ══ ALERTS VIEW ══ */
+.alerts-wrap{display:grid;grid-template-columns:1fr 340px;gap:14px;}
+.alert-config-list{display:flex;flex-direction:column;gap:10px;}
+.alert-config-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;display:flex;align-items:center;gap:16px;transition:border-color .2s;}
+.alert-config-item:hover{border-color:var(--border2);}
+.aci-icon{font-size:24px;width:40px;text-align:center;flex-shrink:0;}
+.aci-info{flex:1;}
+.aci-name{font-size:13px;font-weight:700;margin-bottom:3px;}
+.aci-desc{font-size:11px;color:var(--muted2);font-family:var(--mono);}
+.toggle{width:38px;height:20px;background:var(--border2);border-radius:10px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.toggle.on{background:var(--accent);}
+.toggle-knob{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s;}
+.toggle.on .toggle-knob{left:20px;}
+.add-alert-btn{width:100%;padding:12px;background:transparent;border:1px dashed var(--border2);color:var(--muted2);font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;border-radius:8px;transition:all .2s;margin-top:4px;}
+.add-alert-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,255,136,.04);}
+.recent-alerts-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.ral-item{display:flex;align-items:flex-start;gap:10px;padding:13px 18px;border-bottom:1px solid var(--border);}
+.ral-item:last-child{border-bottom:none;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(7,9,14,.88);backdrop-filter:blur(8px);z-index:50;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:14px;width:580px;max-width:95vw;max-height:85vh;overflow-y:auto;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);}
+.modal-title{font-size:16px;font-weight:800;letter-spacing:-.5px;}
+.modal-close{width:28px;height:28px;border:1px solid var(--border);background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--muted2);transition:all .15s;}
+.modal-close:hover{border-color:var(--red);color:var(--red);}
+.modal-body{padding:20px 24px;}
+.modal-hero{display:flex;gap:16px;margin-bottom:22px;align-items:center;}
+.modal-emoji{font-size:50px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;width:78px;height:78px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-meta h2{font-size:19px;font-weight:800;letter-spacing:-.5px;margin-bottom:5px;}
+.modal-meta p{font-size:12px;color:var(--muted2);font-family:var(--mono);}
+.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;}
+.mstat{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:13px;}
+.mstat-label{font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.mstat-val{font-size:19px;font-weight:800;letter-spacing:-.5px;}
+.mstat-val.g{color:var(--accent);}
+.mstat-val.b{color:var(--accent2);}
+.mstat-val.y{color:var(--gold);}
+.desc-block{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:13px;font-size:13px;color:var(--muted2);line-height:1.7;margin-bottom:13px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px;}
+.tag{padding:3px 9px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--muted2);}
+.modal-actions{display:flex;gap:8px;}
+.btn-mp{flex:1;padding:12px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:12px;cursor:pointer;border-radius:6px;transition:all .2s;}
+.btn-mp:hover{background:#00e07a;}
+.btn-ms{padding:12px 16px;background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:var(--font);font-weight:700;font-size:12px;cursor:pointer;border-radius:6px;transition:all .2s;}
+.btn-ms:hover{border-color:var(--border2);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+*{cursor:default;}
+button,.nav-item,.prod-row:not(.header),.cj-btn,.ftab,.icon-btn,.modal-close,
+.auth-tab,.auth-back,.logout-btn,.plan-btn,.btn-primary,.btn-secondary,
+.btn-ghost,.btn-nav,.l-nav-links a,.footer-links a,.product-card,
+.t-card,.sort-btn,.onboard-card,.onboard-next,.onboard-skip,.toggle,
+.analyze-btn,.ar-btn,.add-alert-btn,.alert-config-item{cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LANDING ══════════════ -->
+<div id="page-landing" class="page active">
+  <nav class="l-nav">
+    <div class="logo">Trend<span>Snipe</span></div>
+    <ul class="l-nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#lproducts">Products</a></li>
+      <li><a href="#lpricing">Pricing</a></li>
+    </ul>
+    <div class="l-nav-right">
+      <button class="btn-ghost" onclick="showAuth('login')">Log in</button>
+      <button class="btn-nav" onclick="showAuth('signup')">Start Free →</button>
+    </div>
+  </nav>
+  <section class="l-hero">
+    <div class="hero-grid"></div><div class="hero-glow"></div><div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><div class="badge-dot"></div>AI-powered product intelligence</div>
+      <h1>Find winning<br/><span class="line2">products</span><br/><span class="strike">before everyone</span></h1>
+      <p class="hero-sub">TrendSnipe scans TikTok and Instagram in real-time to surface viral dropshipping products before they blow up. Source on CJDropshipping in one click.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showAuth('signup')">Start Free Trial →</button>
+        <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How it works</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">2.4K+</div><div class="stat-label">Active Users</div></div>
+        <div class="stat"><div class="stat-num">$4.2M</div><div class="stat-label">Revenue Generated</div></div>
+        <div class="stat"><div class="stat-num">48h</div><div class="stat-label">Avg. Before Viral</div></div>
+      </div>
+    </div>
+  </section>
+  <div class="ticker"><div class="ticker-inner">
+    <span class="ticker-item">🔥 Magnetic Phone Mount +2,840% views</span>
+    <span class="ticker-item">📦 LED Strip Light +1,920% views</span>
+    <span class="ticker-item">🧴 Skin Gua Sha Tool +3,100% views</span>
+    <span class="ticker-item">🎮 Mini Projector +890% views</span>
+    <span class="ticker-item">💪 Posture Corrector +2,200% views</span>
+    <span class="ticker-item">🌿 Mini Humidifier +1,560% views</span>
+    <span class="ticker-item">🔥 Magnetic Phone Mount +2,840% views</span>
+    <span class="ticker-item">📦 LED Strip Light +1,920% views</span>
+    <span class="ticker-item">🧴 Skin Gua Sha Tool +3,100% views</span>
+    <span class="ticker-item">🎮 Mini Projector +890% views</span>
+    <span class="ticker-item">💪 Posture Corrector +2,200% views</span>
+    <span class="ticker-item">🌿 Mini Humidifier +1,560% views</span>
+  </div></div>
+  <section class="l-how" id="how">
+    <div class="l-how-inner">
+      <div class="how-header">
+        <div class="section-label">// How it works</div>
+        <h2 class="section-title">Three steps.<br/>Zero guesswork.</h2>
+        <p class="section-sub">From trend detection to your store in minutes, not days.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">01 / DETECT</div><div class="step-icon">📡</div><h3>We scan the internet</h3><p>Our AI monitors millions of TikTok and Instagram posts daily, detecting products gaining traction before they go mainstream.</p></div>
+        <div class="step"><div class="step-num">02 / ANALYZE</div><div class="step-icon">🧠</div><h3>We score each product</h3><p>Each product gets a Viral Score based on view velocity, engagement rate, and market saturation. Higher score = higher urgency.</p></div>
+        <div class="step"><div class="step-num">03 / SOURCE</div><div class="step-icon">🚀</div><h3>You source & sell</h3><p>One click links directly to CJDropshipping. See cost price, suggested retail, and estimated margin before you commit.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="l-products" id="lproducts">
+    <div class="products-inner">
+      <div class="products-header">
+        <div><div class="section-label">// Trending now</div><h2 class="section-title">Today's winning<br/>products</h2></div>
+        <div class="live-badge"><div class="live-dot"></div>Live feed</div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card" onclick="showAuth('signup')">
+          <div class="card-top"><div class="platform-tag">TikTok</div><div class="trend-score">⚡ 97</div></div>
+          <span class="product-emoji">🧲</span><div class="product-name">Magnetic Phone Mount</div><div class="product-niche">Car Accessories</div>
+          <div class="product-stats"><div><div class="pstat-label">CJ Price</div><div class="pstat-val blue">$3.20</div></div><div><div class="pstat-label">Sell For</div><div class="pstat-val">$24.99</div></div><div><div class="pstat-label">Margin</div><div class="pstat-val green">+680%</div></div></div>
+          <div class="viral-bar"><div class="viral-fill" style="width:97%"></div></div>
+        </div>
+        <div class="product-card" onclick="showAuth('signup')">
+          <div class="card-top"><div class="platform-tag">TikTok</div><div class="trend-score">⚡ 91</div></div>
+          <span class="product-emoji">🧴</span><div class="product-name">Gua Sha Facial Tool</div><div class="product-niche">Beauty / Skincare</div>
+          <div class="product-stats"><div><div class="pstat-label">CJ Price</div><div class="pstat-val blue">$1.80</div></div><div><div class="pstat-label">Sell For</div><div class="pstat-val">$19.99</div></div><div><div class="pstat-label">Margin</div><div class="pstat-val green">+910%</div></div></div>
+          <div class="viral-bar"><div class="viral-fill" style="width:91%"></div></div>
+        </div>
+        <div class="product-card" onclick="showAuth('signup')">
+          <div class="locked-card"><div style="font-size:26px;margin-bottom:6px">🔒</div><div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:1px">Sign up to unlock</div></div>
+          <div class="card-top"><div class="platform-tag">Instagram</div><div class="trend-score">⚡ 88</div></div>
+          <span class="product-emoji">💡</span><div class="product-name">LED Neon Sign</div><div class="product-niche">Home Decor</div>
+          <div class="product-stats"><div><div class="pstat-label">CJ Price</div><div class="pstat-val blue">$8.50</div></div><div><div class="pstat-label">Sell For</div><div class="pstat-val">$49.99</div></div><div><div class="pstat-label">Margin</div><div class="pstat-val green">+488%</div></div></div>
+          <div class="viral-bar"><div class="viral-fill" style="width:88%"></div></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:36px;"><button class="btn-primary" onclick="showAuth('signup')">See All 47 Trending Products →</button></div>
+    </div>
+  </section>
+  <section class="l-pricing" id="lpricing">
+    <div class="pricing-inner">
+      <div class="pricing-header"><div class="section-label">// Pricing</div><h2 class="section-title">Simple, transparent pricing</h2><p class="section-sub" style="margin:0 auto">Start free. Upgrade when ready to scale.</p></div>
+      <div class="plans">
+        <div class="plan">
+          <div class="plan-name">Free</div><div class="plan-price"><sup>$</sup>0</div><div class="plan-period">forever free</div>
+          <ul class="plan-features">
+            <li class="on"><span class="check">✓</span> 3 trending products / day</li>
+            <li class="on"><span class="check">✓</span> Basic viral score</li>
+            <li class="on"><span class="check">✓</span> CJDropshipping link</li>
+            <li><span style="color:var(--border2)">✗</span> Unlimited products</li>
+            <li><span style="color:var(--border2)">✗</span> Real-time alerts</li>
+            <li><span style="color:var(--border2)">✗</span> Wed2C integration</li>
+          </ul>
+          <button class="plan-btn outline" onclick="showAuth('signup')">Get Started Free</button>
+        </div>
+        <div class="plan featured">
+          <div class="plan-tag">Most Popular</div>
+          <div class="plan-name">Pro</div><div class="plan-price"><sup>$</sup>29</div><div class="plan-period">per month · cancel anytime</div>
+          <ul class="plan-features">
+            <li class="on"><span class="check">✓</span> Unlimited products daily</li>
+            <li class="on"><span class="check">✓</span> Advanced viral score + AI</li>
+            <li class="on"><span class="check">✓</span> Real-time Telegram alerts</li>
+            <li class="on"><span class="check">✓</span> Competitor store tracking</li>
+            <li class="on"><span class="check">✓</span> Wed2C direct integration</li>
+            <li class="on"><span class="check">✓</span> CJDropshipping auto-import</li>
+          </ul>
+          <button class="plan-btn solid" onclick="showAuth('signup')">Start 7-Day Free Trial →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="l-footer">
+    <div class="footer-logo">Trend<span>Snipe</span></div>
+    <div class="footer-copy">© 2025 TrendSnipe. All rights reserved.</div>
+    <ul class="footer-links"><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Contact</a></li></ul>
+  </footer>
+</div>
+
+<!-- ══════════════ AUTH ══════════════ -->
+<div id="page-auth" class="page">
+  <div class="auth-grid-bg"></div><div class="auth-glow"></div>
+  <div class="auth-box">
+    <div class="auth-logo">Trend<span>Snipe</span></div>
+    <div class="auth-tagline">PRODUCT INTELLIGENCE PLATFORM</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Log in</div>
+      <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign up</div>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <div class="auth-form">
+      <div id="name-field" style="display:none"><div class="field-label">Full Name</div><input class="field-input" type="text" placeholder="Your name" id="input-name"/></div>
+      <div><div class="field-label">Email</div><input class="field-input" type="email" placeholder="you@example.com" id="input-email"/></div>
+      <div><div class="field-label">Password</div><input class="field-input" type="password" placeholder="••••••••" id="input-pass" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+      <button class="auth-submit" onclick="doAuth()" id="auth-submit-btn">Log in →</button>
+      <div class="auth-divider"><span>or</span></div>
+      <button class="auth-demo" onclick="enterOnboard('Demo User')">Continue with Demo Account</button>
+    </div>
+    <div class="auth-back" onclick="showPage('landing')">← Back to homepage</div>
+  </div>
+</div>
+
+<!-- ══════════════ ONBOARDING ══════════════ -->
+<div id="page-onboard" class="page">
+  <div class="onboard-glow"></div>
+  <div class="onboard-box" id="onboard-box">
+    <!-- step filled by JS -->
+  </div>
+</div>
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div id="page-dashboard" class="page">
+  <nav class="sidebar">
+    <div class="sidebar-logo">Trend<span>Snipe</span></div>
+    <div class="sidebar-section">Main</div>
+    <div class="nav-item active" onclick="showView('home',this)"><span class="nav-icon">⚡</span> Dashboard</div>
+    <div class="nav-item" onclick="showView('trending',this)"><span class="nav-icon">🔥</span> Trending <span class="nav-badge">47</span></div>
+    <div class="nav-item" onclick="showView('saved',this)"><span class="nav-icon">📌</span> Saved</div>
+    <div class="nav-item" onclick="showView('alerts',this)"><span class="nav-icon">🔔</span> Alerts <span class="nav-badge red">3</span></div>
+    <div class="sidebar-section">Tools</div>
+    <div class="nav-item" onclick="showView('analyzer',this)"><span class="nav-icon">🧠</span> Analyzer</div>
+    <div class="nav-item" onclick="showView('competitors',this)"><span class="nav-icon">👁</span> Competitors</div>
+    <div class="nav-item" onclick="showView('cj',this)"><span class="nav-icon">📦</span> CJ Import</div>
+    <div class="nav-item" onclick="showView('aichat',this)"><span class="nav-icon">✨</span> AI Advisor <span class="nav-badge" style="background:linear-gradient(90deg,var(--accent),var(--accent2));color:#000">AI</span></div>
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="avatar" id="d-avatar">K</div>
+        <div><div class="user-name" id="d-username">User</div><div class="user-plan">PRO PLAN</div></div>
+      </div>
+      <div class="logout-btn" onclick="showPage('landing')">← Log out</div>
+    </div>
+  </nav>
+  <div class="d-main">
+    <div class="topbar">
+      <div><span class="topbar-title" id="tb-title">Dashboard</span><span class="topbar-sub" id="d-date"></span></div>
+      <div class="topbar-right">
+        <div class="search-box"><span style="color:var(--muted);font-size:13px">⌕</span><input type="text" placeholder="Search products..."/></div>
+        <div class="icon-btn">🔔<div class="notif-dot"></div></div>
+        <div class="icon-btn">⚙</div>
+      </div>
+    </div>
+    <div class="d-content">
+
+      <!-- HOME VIEW -->
+      <div class="d-view active" id="view-home">
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label">Products Today</div><div class="kpi-val">47</div><div class="kpi-change up">↑ +12 vs yesterday</div><div class="kpi-icon">🔥</div></div>
+          <div class="kpi"><div class="kpi-label">Avg Viral Score</div><div class="kpi-val">84</div><div class="kpi-change up">↑ +6 pts</div><div class="kpi-icon">⚡</div></div>
+          <div class="kpi"><div class="kpi-label">Saved Products</div><div class="kpi-val">23</div><div class="kpi-change up">↑ +3 new</div><div class="kpi-icon">📌</div></div>
+          <div class="kpi"><div class="kpi-label">Active Alerts</div><div class="kpi-val">3</div><div class="kpi-change down">↓ needs action</div><div class="kpi-icon">🔔</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title"><div class="live-header"><div class="live-pulse"></div>Trending Products</div></div><div class="panel-meta">Updated 2 min ago</div></div>
+            <div class="filter-tabs">
+              <div class="ftab active" onclick="filterTab(this)">All</div>
+              <div class="ftab" onclick="filterTab(this)">TikTok</div>
+              <div class="ftab" onclick="filterTab(this)">Instagram</div>
+              <div class="ftab" onclick="filterTab(this)">Beauty</div>
+              <div class="ftab" onclick="filterTab(this)">Tech</div>
+            </div>
+            <div class="product-list-wrap" id="home-prod-list">
+              <div class="prod-row header"><div></div><div>Product</div><div>Score</div><div>CJ Price</div><div>Margin</div><div>Platform</div><div>Source</div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="panel">
+              <div class="panel-head"><div class="panel-title">🔔 Alerts</div><div class="panel-meta" style="color:var(--red)">3 new</div></div>
+              <div class="panel-body" style="padding:10px 16px;">
+                <div class="alert-list">
+                  <div class="alert-item"><div class="al-dot g"></div><div class="alert-content"><div class="alert-title">New #1 in Beauty</div><div class="alert-desc">Gua Sha hit viral — 2.4M views in 48h</div></div><div class="alert-time">2m</div></div>
+                  <div class="alert-item"><div class="al-dot y"></div><div class="alert-content"><div class="alert-title">Price drop on CJ</div><div class="alert-desc">Magnetic Mount $4.10 → $3.20</div></div><div class="alert-time">18m</div></div>
+                  <div class="alert-item"><div class="al-dot r"></div><div class="alert-content"><div class="alert-title">Saturation warning</div><div class="alert-desc">LED strips — 340+ stores selling</div></div><div class="alert-time">1h</div></div>
+                  <div class="alert-item"><div class="al-dot b"></div><div class="alert-content"><div class="alert-title">12 new Tech products</div><div class="alert-desc">Above score 70 today</div></div><div class="alert-time">3h</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><div class="panel-title">📊 Top Niches Today</div></div>
+              <div class="panel-body">
+                <div class="niche-list">
+                  <div><div class="niche-top"><span class="niche-name">Beauty / Skincare</span><span class="niche-pct">34%</span></div><div class="niche-bar"><div class="niche-fill" style="width:34%;background:var(--accent)"></div></div></div>
+                  <div><div class="niche-top"><span class="niche-name">Home Decor</span><span class="niche-pct">22%</span></div><div class="niche-bar"><div class="niche-fill" style="width:22%;background:var(--accent2)"></div></div></div>
+                  <div><div class="niche-top"><span class="niche-name">Tech / Gadgets</span><span class="niche-pct">19%</span></div><div class="niche-bar"><div class="niche-fill" style="width:19%;background:var(--gold)"></div></div></div>
+                  <div><div class="niche-top"><span class="niche-name">Health / Fitness</span><span class="niche-pct">15%</span></div><div class="niche-bar"><div class="niche-fill" style="width:15%;background:var(--purple)"></div></div></div>
+                  <div><div class="niche-top"><span class="niche-name">Other</span><span class="niche-pct">10%</span></div><div class="niche-bar"><div class="niche-fill" style="width:10%;background:var(--muted)"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRENDING VIEW -->
+      <div class="d-view" id="view-trending">
+        <div class="sort-bar">
+          <span class="sort-label">Sort by:</span>
+          <div class="sort-btn active" onclick="sortProducts('score',this)">Viral Score</div>
+          <div class="sort-btn" onclick="sortProducts('margin',this)">Margin</div>
+          <div class="sort-btn" onclick="sortProducts('price',this)">CJ Price</div>
+          <div class="sort-btn" onclick="sortProducts('new',this)">Newest</div>
+        </div>
+        <div class="trending-grid" id="trending-grid"></div>
+      </div>
+
+      <!-- SAVED VIEW -->
+      <div class="d-view" id="view-saved">
+        <div class="panel" style="max-width:900px;">
+          <div class="panel-head"><div class="panel-title">📌 Saved Products</div><div class="panel-meta">23 items</div></div>
+          <div class="product-list-wrap" id="saved-prod-list" style="max-height:500px;">
+            <div class="prod-row header"><div></div><div>Product</div><div>Score</div><div>CJ Price</div><div>Margin</div><div>Platform</div><div>Source</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERTS VIEW -->
+      <div class="d-view" id="view-alerts">
+        <div class="alerts-wrap">
+          <div>
+            <div style="margin-bottom:14px;"><div style="font-size:14px;font-weight:800;margin-bottom:4px;">Alert Settings</div><div style="font-size:12px;color:var(--muted2);font-family:var(--mono);">Get notified when products match your criteria</div></div>
+            <div class="alert-config-list" id="alert-config-list"></div>
+            <button class="add-alert-btn" onclick="alert('Custom alert builder coming soon!')">+ Add Custom Alert</button>
+          </div>
+          <div>
+            <div style="margin-bottom:12px;font-size:14px;font-weight:800;">Recent Notifications</div>
+            <div class="recent-alerts-panel">
+              <div class="ral-item"><div class="al-dot g" style="margin-top:4px;flex-shrink:0"></div><div class="alert-content"><div class="alert-title">New #1 in Beauty</div><div class="alert-desc">Gua Sha Facial Tool hit viral threshold with 2.4M views in 48h</div></div><div class="alert-time" style="font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;padding-left:8px;">2m</div></div>
+              <div class="ral-item"><div class="al-dot y" style="margin-top:4px;flex-shrink:0"></div><div class="alert-content"><div class="alert-title">Price Drop Alert</div><div class="alert-desc">Magnetic Phone Mount dropped from $4.10 → $3.20 on CJ</div></div><div class="alert-time" style="font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;padding-left:8px;">18m</div></div>
+              <div class="ral-item"><div class="al-dot r" style="margin-top:4px;flex-shrink:0"></div><div class="alert-content"><div class="alert-title">Saturation Warning</div><div class="alert-desc">LED Strip Lights — 340+ stores now selling, margins dropping</div></div><div class="alert-time" style="font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;padding-left:8px;">1h</div></div>
+              <div class="ral-item"><div class="al-dot b" style="margin-top:4px;flex-shrink:0"></div><div class="alert-content"><div class="alert-title">New Tech Products</div><div class="alert-desc">12 new tech items detected above score 70 today</div></div><div class="alert-time" style="font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;padding-left:8px;">3h</div></div>
+              <div class="ral-item"><div class="al-dot g" style="margin-top:4px;flex-shrink:0"></div><div class="alert-content"><div class="alert-title">Score 90+ Detected</div><div class="alert-desc">Ice Roller Face just crossed the 90 viral score threshold</div></div><div class="alert-time" style="font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;padding-left:8px;">5h</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYZER VIEW -->
+      <div class="d-view" id="view-analyzer">
+        <div class="analyzer-wrap">
+          <div class="analyzer-input-box">
+            <div class="analyzer-label">// AI Product Analyzer</div>
+            <div class="analyzer-title">Analyze any TikTok product</div>
+            <div class="analyzer-sub">Paste a TikTok or Instagram URL — our AI will extract the product, score its viral potential, find it on CJDropshipping, and give you a full sell recommendation.</div>
+            <div class="url-row">
+              <input class="url-input" id="analyzer-url" type="text" placeholder="https://www.tiktok.com/@user/video/..."/>
+              <button class="analyze-btn" onclick="runAnalyzer()">Analyze →</button>
+            </div>
+          </div>
+          <div class="analyze-loading" id="analyze-loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loading-text">Scanning video...</div>
+          </div>
+          <div class="analyzer-result" id="analyzer-result">
+            <div class="ar-head">
+              <div class="ar-emoji" id="ar-emoji">🧲</div>
+              <div class="ar-meta"><h3 id="ar-name">Product Name</h3><p id="ar-niche">Niche • Platform</p></div>
+            </div>
+            <div class="ar-body">
+              <div class="ar-stats">
+                <div class="ar-stat"><div class="ar-stat-label">Viral Score</div><div class="ar-stat-val y" id="ar-score">—</div></div>
+                <div class="ar-stat"><div class="ar-stat-label">CJ Price</div><div class="ar-stat-val b" id="ar-cj">—</div></div>
+                <div class="ar-stat"><div class="ar-stat-label">Sell Price</div><div class="ar-stat-val" id="ar-sell">—</div></div>
+                <div class="ar-stat"><div class="ar-stat-label">Est. Margin</div><div class="ar-stat-val g" id="ar-margin">—</div></div>
+              </div>
+              <div class="ar-verdict"><div class="ar-verdict-label">AI Verdict</div><div class="ar-verdict-text" id="ar-verdict">—</div></div>
+              <div class="ar-actions">
+                <button class="ar-btn" onclick="alert('Opening CJDropshipping...')">📦 Source on CJ →</button>
+                <button class="ar-btn sec" onclick="alert('Saved!')">📌 Save Product</button>
+                <button class="ar-btn sec" onclick="document.getElementById('analyzer-result').classList.remove('show');document.getElementById('analyzer-url').value=''">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPETITORS / CJ / placeholder views -->
+      <div class="d-view" id="view-competitors">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--muted2);text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px">👁</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;color:var(--text)">Competitor Tracking</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:1px;">Coming in next update</div>
+        </div>
+      </div>
+      <div class="d-view" id="view-cj">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--muted2);text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px">📦</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;color:var(--text)">CJ Auto-Import</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:1px;">Connect your CJ account to enable</div>
+          <button style="margin-top:20px;padding:11px 24px;background:var(--accent);color:#000;border:none;font-family:var(--font);font-weight:800;font-size:13px;border-radius:6px;cursor:pointer;" onclick="alert('CJ integration coming soon!')">Connect CJDropshipping →</button>
+        </div>
+      </div>
+
+      <!-- AI CHAT VIEW -->
+      <div class="d-view" id="view-aichat" style="height:calc(100vh - 56px - 44px);display:none;flex-direction:column;">
+        <div style="display:flex;gap:16px;height:100%;">
+          <!-- CHAT MAIN -->
+          <div style="flex:1;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            <!-- Chat header -->
+            <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+              <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✨</div>
+              <div>
+                <div style="font-size:13px;font-weight:800;">TrendSnipe AI Advisor</div>
+                <div style="font-size:10px;font-family:var(--mono);color:var(--accent);display:flex;align-items:center;gap:5px;"><div class="live-pulse" style="width:5px;height:5px;"></div>Online</div>
+              </div>
+              <button onclick="clearChat()" style="margin-left:auto;padding:5px 12px;background:transparent;border:1px solid var(--border);color:var(--muted2);font-family:var(--mono);font-size:10px;border-radius:4px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">Clear chat</button>
+            </div>
+            <!-- Messages -->
+            <div id="chat-messages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;">
+              <!-- Filled by JS -->
+            </div>
+            <!-- Suggestions -->
+            <div id="chat-suggestions" style="padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px;"></div>
+            <!-- Input -->
+            <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end;">
+              <textarea id="chat-input" placeholder="Ask about products, niches, strategies..." style="flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 14px;font-family:var(--mono);font-size:13px;border-radius:6px;outline:none;resize:none;height:44px;max-height:120px;transition:border-color .2s;line-height:1.5;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}" oninput="this.style.height='44px';this.style.height=Math.min(this.scrollHeight,120)+'px';" onfocus="this.style.borderColor='rgba(0,255,136,.4)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+              <button onclick="sendChat()" id="chat-send-btn" style="width:44px;height:44px;background:var(--accent);border:none;border-radius:6px;font-size:16px;cursor:pointer;flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='#00e07a'" onmouseout="this.style.background='var(--accent)'">→</button>
+            </div>
+          </div>
+          <!-- SIDE PANEL -->
+          <div style="width:220px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;">
+              <div style="font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Quick Actions</div>
+              <div style="display:flex;flex-direction:column;gap:6px;" id="quick-actions"></div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;">
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Context</div>
+              <div style="font-size:11px;color:var(--muted2);line-height:1.6;">AI has access to today's <span style="color:var(--accent)">47 trending products</span>, pricing data, and your saved list.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /d-content -->
+  </div><!-- /d-main -->
+</div><!-- /page-dashboard -->
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title" id="m-title">Product Detail</div><div class="modal-close" onclick="closeModal()">✕</div></div>
+    <div class="modal-body">
+      <div class="modal-hero"><div class="modal-emoji" id="m-emoji">🧲</div><div class="modal-meta"><h2 id="m-name">—</h2><p id="m-niche">—</p><div style="margin-top:8px" id="m-platform"></div></div></div>
+      <div class="modal-stats">
+        <div class="mstat"><div class="mstat-label">Viral Score</div><div class="mstat-val y" id="m-score">—</div></div>
+        <div class="mstat"><div class="mstat-label">CJ Price</div><div class="mstat-val b" id="m-cj">—</div></div>
+        <div class="mstat"><div class="mstat-label">Sell Price</div><div class="mstat-val" id="m-sell">—</div></div>
+        <div class="mstat"><div class="mstat-label">Margin</div><div class="mstat-val g" id="m-margin">—</div></div>
+        <div class="mstat"><div class="mstat-label">Platform</div><div class="mstat-val" id="m-plat">—</div></div>
+        <div class="mstat"><div class="mstat-label">Trend</div><div class="mstat-val g">↑ Rising</div></div>
+      </div>
+      <div class="desc-block" id="m-desc">—</div>
+      <div class="tag-row"><div class="tag">impulse buy</div><div class="tag">organic friendly</div><div class="tag">low competition</div><div class="tag">high margin</div><div class="tag">fast shipping</div></div>
+      <div class="modal-actions">
+        <button class="btn-mp" onclick="alert('Opening CJDropshipping...')">📦 Source on CJDropshipping →</button>
+        <button class="btn-ms" onclick="alert('Saved! ✓')">📌 Save</button>
+        <button class="btn-ms" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const PRODUCTS = [
+  {emoji:'🧲',name:'Magnetic Phone Mount',niche:'Car Accessories',cj:3.20,sell:24.99,margin:680,score:97,platform:'TikTok',desc:'Exploding on TikTok with unboxing videos. Strong impulse buy. Low competition on CJ. Multiple color variants available.'},
+  {emoji:'🧴',name:'Gua Sha Facial Tool',niche:'Beauty / Skincare',cj:1.80,sell:19.99,margin:910,score:91,platform:'TikTok',desc:'BeautyTok phenomenon. Consistently viral every season. Huge female audience 18-35. Works great with organic content.'},
+  {emoji:'💡',name:'LED Neon Sign',niche:'Home Decor',cj:8.50,sell:49.99,margin:488,score:88,platform:'Instagram',desc:'Room aesthetic trend. High AOV. Works with influencer gifting. Custom text variant has 3x higher conversion.'},
+  {emoji:'🌿',name:'Mini Humidifier',niche:'Home / Wellness',cj:5.40,sell:34.99,margin:548,score:85,platform:'TikTok',desc:'ASMR and wellness content driving massive views. Appeals to WFH audience. Strong repeat purchase potential.'},
+  {emoji:'🎮',name:'Mini Projector',niche:'Tech / Entertainment',cj:22.00,sell:89.99,margin:309,score:82,platform:'Instagram',desc:'Movie night aesthetic. Gen Z audience. High perceived value. Good for paid ads with lifestyle creative.'},
+  {emoji:'💪',name:'Posture Corrector',niche:'Health / Fitness',cj:4.10,sell:29.99,margin:631,score:79,platform:'TikTok',desc:'Office worker pain point. Problem-solution angle converts extremely well in TikTok ads. Broad audience appeal.'},
+  {emoji:'🧊',name:'Ice Roller Face',niche:'Beauty / Skincare',cj:2.30,sell:18.99,margin:725,score:74,platform:'TikTok',desc:'Morning routine TikToks. Strong de-puffing claim. Easy organic content. Pairs well with Gua Sha upsell.'},
+  {emoji:'☀️',name:'Sunrise Alarm Clock',niche:'Home / Sleep',cj:11.00,sell:44.99,margin:309,score:68,platform:'Instagram',desc:'Wellness trend. High AOV. Works well with sleep influencers. Subscription potential with sleep content.'},
+  {emoji:'🧺',name:'Folding Storage Box',niche:'Home Organization',cj:4.50,sell:26.99,margin:500,score:63,platform:'TikTok',desc:'Satisfying organization videos. Broad appeal. Works well with "cleaning my room" content genre.'},
+];
+
+const ALERT_CONFIGS = [
+  {icon:'⚡',name:'Score 90+ Alert',desc:'Notify when a product exceeds viral score 90',on:true},
+  {icon:'💰',name:'Price Drop Alert',desc:'CJDropshipping price drops more than 10%',on:true},
+  {icon:'⚠️',name:'Saturation Warning',desc:'Alert when 100+ stores start selling a product',on:true},
+  {icon:'🔥',name:'New Trending Niche',desc:'Emerging niches gaining traction this week',on:false},
+  {icon:'📈',name:'View Velocity Spike',desc:'Products with 500%+ view increase in 24h',on:true},
+  {icon:'💎',name:'High Margin Only',desc:'Show only products with 500%+ margin',on:false},
+];
+
+const ANALYZER_RESULTS = [
+  {emoji:'🧲',name:'Magnetic Car Phone Holder',niche:'Car Accessories • TikTok',score:'94',cj:'$3.20',sell:'$24.99',margin:'+680%',verdict:'Strong buy signal. This product has 2.3M views in the last 72 hours with engagement rate 8.2% — well above the 3% average. CJDropshipping has 5 suppliers with stock ready. Recommended selling price $22-27 for competitive positioning. Best angle: "No more dropping your phone while driving" hook.'},
+  {emoji:'🧴',name:'Viral Gua Sha Tool',niche:'Beauty / Skincare • TikTok',score:'88',cj:'$1.80',sell:'$19.99',margin:'+910%',verdict:'High potential with exceptional margin. BeautyTok is heavily promoting face sculpting tools right now. Organic content angle is extremely accessible — just show before/after. Multiple CJ suppliers available with fast shipping from China warehouses.'},
+  {emoji:'💡',name:'Custom LED Neon Sign',niche:'Home Decor • Instagram',score:'76',cj:'$8.50',sell:'$49.99',margin:'+488%',verdict:'Solid performer but market is getting competitive. 180+ stores already selling this. If you enter now, differentiate with custom text options and faster delivery. Instagram aesthetic content still driving good ROAS. Consider bundling with other room decor items.'},
+];
+
+let analyzerIdx = 0;
+
+// ── ROUTING ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(name==='dashboard'){
+    const d=new Date();
+    document.getElementById('d-date').textContent='— '+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    renderHomeProdList();
+    renderTrendingGrid();
+    renderSavedList();
+    renderAlertConfigs();
+  }
+}
+
+// ── AUTH ──
+function showAuth(mode){showPage('auth');switchTab(mode);}
+function switchTab(mode){
+  const isLogin=mode==='login';
+  document.getElementById('tab-login').classList.toggle('active',isLogin);
+  document.getElementById('tab-signup').classList.toggle('active',!isLogin);
+  document.getElementById('name-field').style.display=isLogin?'none':'block';
+  document.getElementById('auth-submit-btn').textContent=isLogin?'Log in →':'Create Account →';
+  document.getElementById('auth-error').style.display='none';
+}
+function doAuth(){
+  const email=document.getElementById('input-email').value.trim();
+  const pass=document.getElementById('input-pass').value.trim();
+  if(!email||!pass){showErr('Please fill in all fields');return;}
+  if(pass.length<6){showErr('Password must be at least 6 characters');return;}
+  const name=email.split('@')[0];
+  enterOnboard(name);
+}
+function showErr(msg){
+  const el=document.getElementById('auth-error');
+  el.textContent=msg;el.style.display='block';
+}
+function enterOnboard(name){
+  window._userName=name;
+  showPage('onboard');
+  renderOnboard(0);
+}
+
+// ── ONBOARDING ──
+const OB_STEPS=[
+  {
+    title:"What's your main niche?",
+    sub:"We'll personalize your product feed based on what you want to sell.",
+    choices:[
+      {icon:'💄',name:'Beauty',desc:'skincare, makeup'},
+      {icon:'🏠',name:'Home Decor',desc:'lifestyle, interior'},
+      {icon:'💪',name:'Health & Fitness',desc:'wellness, sport'},
+      {icon:'📱',name:'Tech & Gadgets',desc:'electronics, accessories'},
+      {icon:'🐾',name:'Pet Products',desc:'dogs, cats, animals'},
+      {icon:'👗',name:'Fashion',desc:'clothing, accessories'},
+    ]
+  },
+  {
+    title:'What platforms will you use?',
+    sub:'We optimize product recommendations for your traffic source.',
+    choices:[
+      {icon:'🎵',name:'TikTok Organic',desc:'free, takes time'},
+      {icon:'💸',name:'TikTok Ads',desc:'paid, fast results'},
+      {icon:'📸',name:'Instagram',desc:'reels & stories'},
+      {icon:'🌐',name:'All of them',desc:'full coverage'},
+    ]
+  },
+  {
+    title:"What's your monthly budget?",
+    sub:"This helps us filter products by ad spend requirements.",
+    choices:[
+      {icon:'🌱',name:'$0 — Organic only',desc:'no ad budget'},
+      {icon:'💵',name:'$100 — $500',desc:'starting out'},
+      {icon:'💰',name:'$500 — $2,000',desc:'scaling up'},
+      {icon:'🚀',name:'$2,000+',desc:'serious business'},
+    ]
+  }
+];
+
+let obSelected=null;
+function renderOnboard(step){
+  window._obStep=step;
+  obSelected=null;
+  const s=OB_STEPS[step];
+  const dots=OB_STEPS.map((_,i)=>`<div class="ob-dot ${i<=step?'done':''}"></div>`).join('');
+  document.getElementById('onboard-box').innerHTML=`
+    <div class="onboard-step">Step ${step+1} of ${OB_STEPS.length}</div>
+    <div class="onboard-progress">${dots}</div>
+    <div class="onboard-title">${s.title}</div>
+    <div class="onboard-sub">${s.sub}</div>
+    <div class="onboard-grid">${s.choices.map((c,i)=>`
+      <div class="onboard-card" id="oc-${i}" onclick="selectOC(${i})">
+        <div class="onboard-card-icon">${c.icon}</div>
+        <div class="onboard-card-name">${c.name}</div>
+        <div class="onboard-card-desc">${c.desc}</div>
+      </div>`).join('')}
+    </div>
+    <button class="onboard-next" onclick="nextOnboard()">Continue →</button>
+    <div class="onboard-skip" onclick="skipOnboard()">Skip setup</div>
+  `;
+}
+function selectOC(i){
+  document.querySelectorAll('.onboard-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('oc-'+i).classList.add('selected');
+  obSelected=i;
+}
+function nextOnboard(){
+  const step=window._obStep;
+  if(step<OB_STEPS.length-1){renderOnboard(step+1);}
+  else{enterDashboard();}
+}
+function skipOnboard(){enterDashboard();}
+function enterDashboard(){
+  const name=window._userName||'User';
+  const initials=name.charAt(0).toUpperCase();
+  document.getElementById('d-username').textContent=name.charAt(0).toUpperCase()+name.slice(1);
+  document.getElementById('d-avatar').textContent=initials;
+  showPage('dashboard');
+  showView('home',null);
+}
+
+// ── DASHBOARD VIEWS ──
+function showView(name,navEl){
+  document.querySelectorAll('.d-view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(navEl)navEl.classList.add('active');
+  const titles={home:'Dashboard',trending:'Trending',saved:'Saved Products',alerts:'Alerts',analyzer:'Analyzer',competitors:'Competitors',cj:'CJ Import'};
+  document.getElementById('tb-title').textContent=titles[name]||name;
+}
+
+function filterTab(el){
+  document.querySelectorAll('#view-home .ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── RENDER PRODUCTS ──
+function prodRow(p){
+  const sc=p.score>=80?'high':p.score>=65?'med':'low';
+  const pt=p.platform.toLowerCase()==='tiktok'?'tiktok':'instagram';
+  return `<div class="prod-row" onclick="openModal('${p.name}','${p.emoji}','${p.niche}','${p.cj.toFixed(2)}','${p.sell.toFixed(2)}','${p.margin}','${p.score}','${p.platform}','${p.desc}')">
+    <div class="prod-emoji">${p.emoji}</div>
+    <div class="prod-info"><div class="prod-name">${p.name}</div><div class="prod-niche">${p.niche}</div></div>
+    <div><div class="score-pill ${sc}">⚡ ${p.score}</div></div>
+    <div class="price-tag blue">$${p.cj.toFixed(2)}</div>
+    <div class="price-tag green">+${p.margin}%</div>
+    <div><div class="plat-tag ${pt}">${p.platform}</div></div>
+    <button class="cj-btn" onclick="event.stopPropagation();alert('Opening CJDropshipping...')">CJ →</button>
+  </div>`;
+}
+
+function renderHomeProdList(){
+  const wrap=document.getElementById('home-prod-list');
+  const header=wrap.querySelector('.header');
+  wrap.innerHTML='';
+  if(header)wrap.appendChild(header);
+  else wrap.innerHTML='<div class="prod-row header"><div></div><div>Product</div><div>Score</div><div>CJ Price</div><div>Margin</div><div>Platform</div><div>Source</div></div>';
+  PRODUCTS.forEach(p=>wrap.insertAdjacentHTML('beforeend',prodRow(p)));
+}
+
+function renderSavedList(){
+  const wrap=document.getElementById('saved-prod-list');
+  wrap.innerHTML='<div class="prod-row header"><div></div><div>Product</div><div>Score</div><div>CJ Price</div><div>Margin</div><div>Platform</div><div>Source</div></div>';
+  PRODUCTS.slice(0,5).forEach(p=>wrap.insertAdjacentHTML('beforeend',prodRow(p)));
+}
+
+function renderTrendingGrid(){
+  const grid=document.getElementById('trending-grid');
+  grid.innerHTML=PRODUCTS.map((p,i)=>{
+    const sc=p.score>=80?'high':p.score>=65?'med':'low';
+    const rankCls=i<3?'top':'';
+    return `<div class="t-card" onclick="openModal('${p.name}','${p.emoji}','${p.niche}','${p.cj.toFixed(2)}','${p.sell.toFixed(2)}','${p.margin}','${p.score}','${p.platform}','${p.desc}')">
+      <div class="t-card-top"><div class="t-rank ${rankCls}">#${i+1}</div><div class="score-pill ${sc}">⚡ ${p.score}</div></div>
+      <span class="t-emoji">${p.emoji}</span>
+      <div class="t-name">${p.name}</div>
+      <div class="t-niche">${p.niche}</div>
+      <div class="t-row"><span class="t-key">CJ Price</span><span class="t-val b">$${p.cj.toFixed(2)}</span></div>
+      <div class="t-row"><span class="t-key">Sell For</span><span class="t-val">$${p.sell.toFixed(2)}</span></div>
+      <div class="t-row"><span class="t-key">Margin</span><span class="t-val g">+${p.margin}%</span></div>
+      <div class="t-row"><span class="t-key">Platform</span><span class="t-val">${p.platform}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function sortProducts(by,el){
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const sorted=[...PRODUCTS].sort((a,b)=>by==='score'?b.score-a.score:by==='margin'?b.margin-a.margin:by==='price'?a.cj-b.cj:0);
+  const grid=document.getElementById('trending-grid');
+  grid.innerHTML='';
+  sorted.forEach((p,i)=>{
+    const sc=p.score>=80?'high':p.score>=65?'med':'low';
+    const rankCls=i<3?'top':'';
+    grid.insertAdjacentHTML('beforeend',`<div class="t-card" onclick="openModal('${p.name}','${p.emoji}','${p.niche}','${p.cj.toFixed(2)}','${p.sell.toFixed(2)}','${p.margin}','${p.score}','${p.platform}','${p.desc}')">
+      <div class="t-card-top"><div class="t-rank ${rankCls}">#${i+1}</div><div class="score-pill ${sc}">⚡ ${p.score}</div></div>
+      <span class="t-emoji">${p.emoji}</span><div class="t-name">${p.name}</div><div class="t-niche">${p.niche}</div>
+      <div class="t-row"><span class="t-key">CJ Price</span><span class="t-val b">$${p.cj.toFixed(2)}</span></div>
+      <div class="t-row"><span class="t-key">Sell For</span><span class="t-val">$${p.sell.toFixed(2)}</span></div>
+      <div class="t-row"><span class="t-key">Margin</span><span class="t-val g">+${p.margin}%</span></div>
+      <div class="t-row"><span class="t-key">Platform</span><span class="t-val">${p.platform}</span></div>
+    </div>`);
+  });
+}
+
+function renderAlertConfigs(){
+  document.getElementById('alert-config-list').innerHTML=ALERT_CONFIGS.map((a,i)=>`
+    <div class="alert-config-item">
+      <div class="aci-icon">${a.icon}</div>
+      <div class="aci-info"><div class="aci-name">${a.name}</div><div class="aci-desc">${a.desc}</div></div>
+      <div class="toggle ${a.on?'on':''}" onclick="toggleAlert(this,${i})"><div class="toggle-knob"></div></div>
+    </div>`).join('');
+}
+
+function toggleAlert(el,i){
+  el.classList.toggle('on');
+  ALERT_CONFIGS[i].on=el.classList.contains('on');
+}
+
+// ── ANALYZER ──
+function runAnalyzer(){
+  const url=document.getElementById('analyzer-url').value.trim();
+  if(!url){return;}
+  const result=document.getElementById('analyzer-result');
+  const loading=document.getElementById('analyze-loading');
+  result.classList.remove('show');
+  loading.classList.add('show');
+  const steps=['Scanning video...','Identifying product...','Checking CJDropshipping...','Calculating viral score...','Generating recommendation...'];
+  let si=0;
+  const iv=setInterval(()=>{
+    document.getElementById('loading-text').textContent=steps[si]||'Finishing...';
+    si++;
+  },600);
+  setTimeout(()=>{
+    clearInterval(iv);
+    loading.classList.remove('show');
+    const r=ANALYZER_RESULTS[analyzerIdx%ANALYZER_RESULTS.length];
+    analyzerIdx++;
+    document.getElementById('ar-emoji').textContent=r.emoji;
+    document.getElementById('ar-name').textContent=r.name;
+    document.getElementById('ar-niche').textContent=r.niche;
+    document.getElementById('ar-score').textContent=r.score+' / 100';
+    document.getElementById('ar-cj').textContent=r.cj;
+    document.getElementById('ar-sell').textContent=r.sell;
+    document.getElementById('ar-margin').textContent=r.margin;
+    document.getElementById('ar-verdict').textContent=r.verdict;
+    result.classList.add('show');
+  },3200);
+}
+
+// ── MODAL ──
+function openModal(name,emoji,niche,cj,sell,margin,score,platform,desc){
+
+  document.getElementById('m-title').textContent=name;
+  document.getElementById('m-name').textContent=name;
+  document.getElementById('m-emoji').textContent=emoji;
+  document.getElementById('m-niche').textContent=niche;
+  document.getElementById('m-score').textContent=score+' / 100';
+  document.getElementById('m-cj').textContent='$'+cj;
+  document.getElementById('m-sell').textContent='$'+sell;
+  document.getElementById('m-margin').textContent='+'+margin+'%';
+  document.getElementById('m-plat').textContent=platform;
+  document.getElementById('m-desc').textContent=desc;
+  const pt=platform.toLowerCase()==='tiktok'?'tiktok':'instagram';
+  document.getElementById('m-platform').innerHTML=`<span class="plat-tag ${pt}">${platform}</span>`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal'))
+    document.getElementById('modal').classList.remove('open');
+}
+// ── AI CHAT ──
+const CHAT_SYSTEM = `You are TrendSnipe AI Advisor, an expert dropshipping consultant embedded inside the TrendSnipe platform. You help users find winning products, analyze trends, pick niches, and build dropshipping strategies.
+
+Today's top trending products in our database:
+1. Magnetic Phone Mount — Score 97, CJ $3.20, sell $24.99, +680% margin, TikTok
+2. Gua Sha Facial Tool — Score 91, CJ $1.80, sell $19.99, +910% margin, TikTok
+3. LED Neon Sign — Score 88, CJ $8.50, sell $49.99, +488% margin, Instagram
+4. Mini Humidifier — Score 85, CJ $5.40, sell $34.99, +548% margin, TikTok
+5. Mini Projector — Score 82, CJ $22.00, sell $89.99, +309% margin, Instagram
+6. Posture Corrector — Score 79, CJ $4.10, sell $29.99, +631% margin, TikTok
+7. Ice Roller Face — Score 74, CJ $2.30, sell $18.99, +725% margin, TikTok
+8. Sunrise Alarm Clock — Score 68, CJ $11.00, sell $44.99, +309% margin, Instagram
+
+Be concise, direct, and actionable. Use emojis sparingly. Format responses with short paragraphs. When recommending products, always mention margin and platform. Keep answers under 200 words unless asked for detail.`;
+
+let chatHistory = [];
+let chatLoading = false;
+
+const QUICK_ACTIONS = [
+  {label:'Best product today',msg:'What is the single best product to sell today and why?'},
+  {label:'Beauty niche strategy',msg:'Give me a complete strategy for selling beauty products via TikTok organic'},
+  {label:'Budget under $500',msg:'What products should I start with if my ad budget is under $500/month?'},
+  {label:'Highest margin picks',msg:'Show me the top 3 products by margin and explain why they work'},
+  {label:'Avoid saturated products',msg:'Which products should I avoid due to market saturation?'},
+];
+
+const SUGGESTIONS = [
+  'Which niche is best for beginners?',
+  'How do I write a winning TikTok ad hook?',
+  'Compare TikTok Organic vs Paid Ads',
+  'What makes a product go viral?',
+];
+
+function initChat() {
+  chatHistory = [];
+  const msgs = document.getElementById('chat-messages');
+  msgs.innerHTML = '';
+  // Welcome message
+  appendMsg('assistant', `Hey! 👋 I'm your TrendSnipe AI Advisor. I have access to today's trending products, pricing data, and market insights.\n\nAsk me anything — which product to sell, how to write a TikTok hook, or what niche to pick for your budget.`);
+
+  // Suggestions
+  const sug = document.getElementById('chat-suggestions');
+  sug.innerHTML = SUGGESTIONS.map(s => `<button onclick="sendSuggestion('${s}')" style="padding:5px 11px;background:var(--bg3);border:1px solid var(--border);color:var(--muted2);font-family:var(--mono);font-size:10px;border-radius:4px;cursor:pointer;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='rgba(0,255,136,.3)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted2)'">${s}</button>`).join('');
+
+  // Quick actions
+  const qa = document.getElementById('quick-actions');
+  qa.innerHTML = QUICK_ACTIONS.map(a => `<button onclick="sendSuggestion('${a.msg}')" style="width:100%;text-align:left;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);color:var(--muted2);font-family:var(--mono);font-size:10px;border-radius:5px;cursor:pointer;transition:all .15s;line-height:1.4;" onmouseover="this.style.borderColor='rgba(0,255,136,.25)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted2)'">${a.label}</button>`).join('');
+}
+
+function appendMsg(role, text) {
+  const msgs = document.getElementById('chat-messages');
+  const isUser = role === 'user';
+  const div = document.createElement('div');
+  div.style.cssText = `display:flex;gap:10px;align-items:flex-start;${isUser ? 'flex-direction:row-reverse;' : ''}animation:fadeUp .3s ease both;`;
+
+  const avatar = document.createElement('div');
+  avatar.style.cssText = `width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:2px;${isUser ? 'background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;' : 'background:var(--bg3);border:1px solid var(--border);color:var(--accent);'}`;
+  avatar.textContent = isUser ? (document.getElementById('d-avatar').textContent || 'U') : '✨';
+
+  const bubble = document.createElement('div');
+  bubble.style.cssText = `max-width:75%;padding:12px 14px;border-radius:8px;font-size:13px;line-height:1.65;white-space:pre-wrap;${isUser ? 'background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.15);color:var(--text);border-radius:8px 0 8px 8px;' : 'background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:0 8px 8px 8px;'}`;
+  bubble.textContent = text;
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return bubble;
+}
+
+function appendTyping() {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.id = 'typing-indicator';
+  div.style.cssText = 'display:flex;gap:10px;align-items:flex-start;animation:fadeUp .3s ease both;';
+  div.innerHTML = `
+    <div style="width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;">✨</div>
+    <div style="padding:12px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:0 8px 8px 8px;display:flex;gap:5px;align-items:center;">
+      <div style="width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:typingDot .8s infinite;"></div>
+      <div style="width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:typingDot .8s .2s infinite;"></div>
+      <div style="width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:typingDot .8s .4s infinite;"></div>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+async function sendChat() {
+  if (chatLoading) return;
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = '44px';
+  document.getElementById('chat-suggestions').style.display = 'none';
+  appendMsg('user', text);
+  chatHistory.push({role: 'user', content: text});
+  chatLoading = true;
+  document.getElementById('chat-send-btn').style.opacity = '0.5';
+  appendTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: CHAT_SYSTEM,
+        messages: chatHistory,
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I could not get a response.';
+    removeTyping();
+    appendMsg('assistant', reply);
+    chatHistory.push({role: 'assistant', content: reply});
+  } catch(e) {
+    removeTyping();
+    appendMsg('assistant', 'Connection error. Please try again.');
+  }
+  chatLoading = false;
+  document.getElementById('chat-send-btn').style.opacity = '1';
+}
+
+function sendSuggestion(text) {
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+function clearChat() {
+  initChat();
+}
+
+// Patch showView to init chat and handle flex display
+const _origShowView = showView;
+function showView(name, navEl) {
+  document.querySelectorAll('.d-view').forEach(v => {
+    v.style.display = 'none';
+    v.classList.remove('active');
+  });
+  const view = document.getElementById('view-' + name);
+  if (view) {
+    if (name === 'aichat') {
+      view.style.display = 'flex';
+      if (chatHistory.length === 0) initChat();
+    } else {
+      view.style.display = 'block';
+    }
+    view.classList.add('active');
+  }
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  const titles = {home:'Dashboard',trending:'Trending',saved:'Saved Products',alerts:'Alerts',analyzer:'Analyzer',competitors:'Competitors',cj:'CJ Import',aichat:'AI Advisor'};
+  document.getElementById('tb-title').textContent = titles[name] || name;
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+</script>
+<style>
+@keyframes typingDot{0%,100%{opacity:.3;transform:translateY(0);}50%{opacity:1;transform:translateY(-3px);}}
+#view-aichat{display:none;}
+#view-aichat.active{display:flex!important;}
+#chat-messages::-webkit-scrollbar{width:3px;}
+#chat-messages::-webkit-scrollbar-thumb{background:var(--border2);}
+</style>
+</body>
+</html>
